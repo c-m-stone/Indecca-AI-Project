@@ -35,8 +35,8 @@ const DocumentsSidebar = ({ notebookId }: DocumentsSidebarProps) => {
   };
 
   const handleDownload = (document: any) => {
-    if (document.url) {
-      window.open(document.url, '_blank');
+    if (document.link) {
+      window.open(document.link, '_blank');
     }
   };
 
