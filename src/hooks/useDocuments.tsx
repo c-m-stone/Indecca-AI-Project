@@ -48,7 +48,7 @@ export const useDocuments = (notebookId?: string) => {
 
           queryClient.setQueryData(['created_documents', notebookId], (oldDocuments: any[] = []) => {
             switch (payload.eventType) {
-              case 'INSERT':
+              case 'INSERT': {
                 const newDocument = payload.new as any;
                 const existsInsert = oldDocuments.some(doc => doc.id === newDocument?.id);
                 if (existsInsert) {
@@ -57,22 +57,26 @@ export const useDocuments = (notebookId?: string) => {
                 }
                 console.log('Adding new document to cache:', newDocument);
                 return [newDocument, ...oldDocuments];
+              }
 
-              case 'UPDATE':
+              case 'UPDATE': {
                 const updatedDocument = payload.new as any;
                 console.log('Updating document in cache:', updatedDocument?.id);
                 return oldDocuments.map(doc =>
                   doc.id === updatedDocument?.id ? updatedDocument : doc
                 );
+              }
 
-              case 'DELETE':
+              case 'DELETE': {
                 const deletedDocument = payload.old as any;
                 console.log('Removing document from cache:', deletedDocument?.id);
                 return oldDocuments.filter(doc => doc.id !== deletedDocument?.id);
+              }
 
-              default:
+              default: {
                 console.log('Unknown event type:', payload.eventType);
                 return oldDocuments;
+              }
             }
           });
         }
