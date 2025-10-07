@@ -108,7 +108,7 @@ export const useDocuments = (notebookId?: string) => {
         body: JSON.stringify({
           name: documentName,
           session_id: notebookId,
-          id: document.id,
+          id: documentId,
         }),
       });
 
