@@ -63,7 +63,7 @@ export const useNotebookSharing = (notebookId?: string) => {
       }
       
       // Create user map from auth.users data
-      let userMap = new Map();
+      const userMap = new Map<string, { email: string | null; full_name: string | null }>();
       if (usersData?.users) {
         usersData.users.forEach((user: any) => {
           userMap.set(user.id, {
@@ -76,13 +76,13 @@ export const useNotebookSharing = (notebookId?: string) => {
       // If we don't have users from auth.users, try profiles table
       if (userMap.size === 0) {
         console.log('Fetching from profiles table as fallback...');
-      const { data: profiles, error: profilesError } = await supabase
-        .from('profiles')
-        .select('id, email, full_name')
-        .in('id', userIds);
+        const { data: profiles, error: profilesError } = await supabase
+          .from('profiles')
+          .select('id, email, full_name')
+          .in('id', userIds);
 
-      if (profilesError) {
-        console.error('Error fetching profiles:', profilesError);
+        if (profilesError) {
+          console.error('Error fetching profiles:', profilesError);
           // Continue with empty profiles rather than throwing
           console.log('Continuing with empty profiles...');
         } else if (profiles) {
@@ -92,7 +92,7 @@ export const useNotebookSharing = (notebookId?: string) => {
               full_name: profile.full_name
             });
           });
-      }
+        }
       }
 
       console.log('Final user map:', userMap);

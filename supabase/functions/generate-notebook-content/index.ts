@@ -55,7 +55,7 @@ serve(async (req) => {
     console.log('Calling external web service...')
 
     // Prepare payload based on source type
-    let payload: any = {
+    const payload: Record<string, unknown> = {
       sourceType: sourceType
     };
 

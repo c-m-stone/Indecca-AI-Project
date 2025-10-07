@@ -9,6 +9,41 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      created_documents: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          notebook_id: string
+          updated_at: string | null
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          notebook_id: string
+          updated_at?: string | null
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          notebook_id?: string
+          updated_at?: string | null
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "created_documents_notebook_id_fkey"
+            columns: ["notebook_id"]
+            isOneToOne: false
+            referencedRelation: "notebooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       documents: {
         Row: {
           content: string | null
@@ -141,6 +176,52 @@ export type Database = {
             columns: ["notebook_id"]
             isOneToOne: false
             referencedRelation: "notebooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notebook_shares: {
+        Row: {
+          created_at: string
+          id: string
+          notebook_id: string
+          shared_by: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notebook_id: string
+          shared_by: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notebook_id?: string
+          shared_by?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notebook_shares_notebook_id_fkey"
+            columns: ["notebook_id"]
+            isOneToOne: false
+            referencedRelation: "notebooks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notebook_shares_shared_by_fkey"
+            columns: ["shared_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notebook_shares_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

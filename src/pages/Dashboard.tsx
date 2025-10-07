@@ -99,7 +99,7 @@ const Dashboard = () => {
       
       <main className="max-w-7xl mx-auto px-6 py-[60px]">
         <div className="mb-8">
-          <h1 className="font-medium text-gray-900 mb-2 text-5xl">Welcome to IndeccaAI</h1>
+          <h1 className="font-medium text-gray-900 mb-2 text-5xl">Welcome to CMS AI Assistant</h1>
         </div>
 
         {hasNotebooks ? <NotebookGrid /> : <EmptyDashboard />}
