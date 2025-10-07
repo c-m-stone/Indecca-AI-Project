@@ -28,15 +28,15 @@ const DocumentsSidebar = ({ notebookId }: DocumentsSidebarProps) => {
 
   const confirmDelete = () => {
     if (selectedDocument) {
-      deleteDocument({ documentId: selectedDocument.id, documentName: selectedDocument.name });
+      deleteDocument({ documentName: selectedDocument.name });
       setShowDeleteDialog(false);
       setSelectedDocument(null);
     }
   };
 
   const handleDownload = (document: any) => {
-    if (document.url) {
-      window.open(document.url, '_blank');
+    if (document.link) {
+      window.open(document.link, '_blank');
     }
   };
 

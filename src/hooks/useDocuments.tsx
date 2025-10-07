@@ -95,7 +95,7 @@ export const useDocuments = (notebookId?: string) => {
   }, [notebookId, user, queryClient]);
 
   const deleteDocument = useMutation({
-    mutationFn: async ({ documentId, documentName }: { documentId: string; documentName: string }) => {
+    mutationFn: async ({ documentName }: { documentName: string }) => {
       if (!notebookId) {
         throw new Error('Cannot delete document without a notebook id');
       }
@@ -106,9 +106,9 @@ export const useDocuments = (notebookId?: string) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id: documentId,
           name: documentName,
-          notebookId,
+          session_id: notebookId,
+          id: documentId,
         }),
       });
 
@@ -116,10 +116,10 @@ export const useDocuments = (notebookId?: string) => {
         throw new Error('Failed to delete document');
       }
 
-      return { documentId, documentName };
+      return { documentName };
     },
-    onSuccess: ({ documentId, documentName }) => {
-      console.log('Document deleted successfully:', { documentId, documentName });
+    onSuccess: ({ documentName }) => {
+      console.log('Document deleted successfully:', documentName);
       queryClient.invalidateQueries({ queryKey: ['created_documents', notebookId] });
     },
   });
