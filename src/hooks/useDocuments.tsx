@@ -95,7 +95,13 @@ export const useDocuments = (notebookId?: string) => {
   }, [notebookId, user, queryClient]);
 
   const deleteDocument = useMutation({
-    mutationFn: async ({ documentName }: { documentName: string }) => {
+    mutationFn: async ({
+      documentId,
+      documentName,
+    }: {
+      documentId: string;
+      documentName: string;
+    }) => {
       if (!notebookId) {
         throw new Error('Cannot delete document without a notebook id');
       }
