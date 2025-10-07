@@ -31,6 +31,7 @@ interface ChatAreaProps {
     generation_status?: string;
     icon?: string;
     example_questions?: string[];
+    user_id?: string;
   } | null;
   onCitationClick?: (citation: Citation) => void;
   setActiveTab?: (tab: string) => void;
@@ -490,7 +491,7 @@ const ChatArea = ({
       
       {/* Footer */}
       <div className="p-4 border-t border-gray-200 flex-shrink-0">
-        <p className="text-center text-sm text-gray-500">IndeccaAI can be inaccurate; please double-check its responses.</p>
+        <p className="text-center text-sm text-gray-500">CMS AI Assistant can be inaccurate; please double-check its responses.</p>
       </div>
     </div>
   );

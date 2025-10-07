@@ -28,7 +28,7 @@ const DocumentsSidebar = ({ notebookId }: DocumentsSidebarProps) => {
 
   const confirmDelete = () => {
     if (selectedDocument) {
-      deleteDocument(selectedDocument.id);
+      deleteDocument({ documentId: selectedDocument.id, documentName: selectedDocument.name });
       setShowDeleteDialog(false);
       setSelectedDocument(null);
     }

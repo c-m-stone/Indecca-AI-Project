@@ -23,6 +23,9 @@ export const useDocuments = (notebookId?: string) => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
+      // Expose the Supabase `created_documents` rows as `documents` to the UI.
+      // The sidebar consumes this hook and treats the result as a list of documents,
+      // so we keep the consumer-friendly naming even though the table is `created_documents`.
       return data;
     },
     enabled: !!notebookId,
@@ -48,7 +51,7 @@ export const useDocuments = (notebookId?: string) => {
 
           queryClient.setQueryData(['created_documents', notebookId], (oldDocuments: any[] = []) => {
             switch (payload.eventType) {
-              case 'INSERT':
+              case 'INSERT': {
                 const newDocument = payload.new as any;
                 const existsInsert = oldDocuments.some(doc => doc.id === newDocument?.id);
                 if (existsInsert) {
@@ -57,22 +60,26 @@ export const useDocuments = (notebookId?: string) => {
                 }
                 console.log('Adding new document to cache:', newDocument);
                 return [newDocument, ...oldDocuments];
+              }
 
-              case 'UPDATE':
+              case 'UPDATE': {
                 const updatedDocument = payload.new as any;
                 console.log('Updating document in cache:', updatedDocument?.id);
                 return oldDocuments.map(doc =>
                   doc.id === updatedDocument?.id ? updatedDocument : doc
                 );
+              }
 
-              case 'DELETE':
+              case 'DELETE': {
                 const deletedDocument = payload.old as any;
                 console.log('Removing document from cache:', deletedDocument?.id);
                 return oldDocuments.filter(doc => doc.id !== deletedDocument?.id);
+              }
 
-              default:
+              default: {
                 console.log('Unknown event type:', payload.eventType);
                 return oldDocuments;
+              }
             }
           });
         }
@@ -88,23 +95,31 @@ export const useDocuments = (notebookId?: string) => {
   }, [notebookId, user, queryClient]);
 
   const deleteDocument = useMutation({
-    mutationFn: async (documentId: string) => {
+    mutationFn: async ({ documentId, documentName }: { documentId: string; documentName: string }) => {
+      if (!notebookId) {
+        throw new Error('Cannot delete document without a notebook id');
+      }
+
       const response = await fetch('https://gctehpfm.rpcl.app/webhook/2130ba17-dcee-4ed1-a881-fcf4f34215a3', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: documentId }),
+        body: JSON.stringify({
+          id: documentId,
+          name: documentName,
+          notebookId,
+        }),
       });
 
       if (!response.ok) {
         throw new Error('Failed to delete document');
       }
 
-      return documentId;
+      return { documentId, documentName };
     },
-    onSuccess: (deletedDocumentId) => {
-      console.log('Document deleted successfully:', deletedDocumentId);
+    onSuccess: ({ documentId, documentName }) => {
+      console.log('Document deleted successfully:', { documentId, documentName });
       queryClient.invalidateQueries({ queryKey: ['created_documents', notebookId] });
     },
   });

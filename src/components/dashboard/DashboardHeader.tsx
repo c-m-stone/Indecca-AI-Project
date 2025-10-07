@@ -26,7 +26,7 @@ const DashboardHeader = ({ userEmail }: DashboardHeaderProps) => {
           >
             <Logo />
           </button>
-          <h1 className="text-xl font-medium text-gray-900">IndeccaAI</h1>
+          <h1 className="text-xl font-medium text-gray-900">CMS AI Assistant</h1>
         </div>
         
         <div className="flex items-center space-x-4">
